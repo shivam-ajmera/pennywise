@@ -52,3 +52,139 @@ input::-webkit-inner-spin-button {
     font-style: italic;
 }
 
+/* .receipt-container {
+    background-color: white;
+    width: 100px;
+    padding: 10px;
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+#event-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#event-list li {
+    border-bottom: 1px dashed #000;
+    padding: 5px 0;
+} */
+
+
+.receipt-container {
+    display: block;
+    width: 100%;
+    background: #fff;
+    max-width: 200px;
+    padding: 15px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.receipt-header {
+    border-bottom: 1px dashed #000;
+    text-align: center;
+}
+
+.receipt-header h1 {
+    font-size: 20px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.receipt-header h1 span {
+    display: block;
+    font-size: 25px;
+}
+
+.receipt-header h2 {
+    font-size: 14px;
+    color: #727070;
+    font-weight: 300;
+}
+
+.receipt-header h2 span {
+    display: block;
+}
+
+
+
+table {
+    width: 100%;
+}
+
+thead, tfoot {
+    position: relative;
+}
+
+thead th:not(:last-child) {
+    text-align: left;
+}
+
+thead th:last-child {
+    text-align: right;
+}
+
+thead::after {
+    content: '';
+    width: 100%;
+    border-bottom: 1px dashed #000;
+    display: block;
+    position: absolute;
+}
+
+tbody td:not(:last-child), tfoot td:not(:last-child) {
+    text-align: left;
+}
+
+tbody td:last-child, tfoot td:last-child{
+    text-align: right;
+}
+
+tbody tr:first-child td {
+    padding-top: 15px;
+}
+
+tbody tr:last-child td {
+    padding-bottom: 15px;
+}
+
+tfoot tr:first-child td {
+    padding-top: 15px;
+}
+
+tfoot::before {
+    content: '';
+    width: 100%;
+    border-top: 1px dashed #000;
+    display: block;
+    position: absolute;
+}
+
+tfoot tr:first-child td:first-child, tfoot tr:first-child td:last-child {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#date {
+    display: flex;
+    justify-content: center;
+    column-gap: 25px;
+}
+
+.items {
+    margin-top: 25px;
+}
+
+.thanks {
+    border-top: 1px dashed #000;
+    padding-top: 10px;
+    /* margin-top: 25px; */
+    text-align: center;
+    font-style: italic;
+}
+

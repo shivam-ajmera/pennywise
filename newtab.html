@@ -14,7 +14,37 @@
             <p class="dollar-value"></p>
             <p class="comparison-value"></p>
         </div>
+        <div class="receipt-container">
+    
+          <div class="receipt-header">
+          <h1>Receipt</h1>
+          </div>
+          
+          <div class="receipt-body">
+      
+              <p id="date"></p>
+              <div class="events">
+                  <table>
+                      <thead>
+                          <th>Time</th>
+                          <th>Class</th>
+                          <th>Duration</th>
+                      </thead>
+                      <tbody id="events-table-body"></tbody>
+                      <tfoot>
+                          <tr>
+                              <td>Debt</td>
+                              <td></td>
+                              <td>&infin;</td>
+                          </tr>
+                      </tfoot>
+                  </table>
+              </div>
+          </div>
+          <h3 class="thanks">Thank you for your purchase!</h3>
+      </div>
     </main>
   <script src="./js/cost.js"></script>
+  <script src="./js/receipt.js"></script>
 </body>
 </html>
