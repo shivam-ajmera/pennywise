@@ -1,5 +1,36 @@
+const STORAGE_KEY = "nameListStorage"; // Key for storing data in Chrome storage
+
 const cost = document.querySelector('.dollar-value');
 const comparison = document.querySelector('.comparison-value');
+
+function isTodayDate(inputDate) {
+    const today = new Date("2023-09-13T00:00:00");
+
+    return inputDate.getDate() === today.getDate() &&
+            inputDate.getMonth() === today.getMonth() &&
+            inputDate.getFullYear() === today.getFullYear();
+}
+
+function containsAnySubstring(str, substrings) {
+    return substrings.some(substring => str.includes(substring));
+}
+
+async function getTodayEvents() {
+    const todayEvents = [];
+    const events = await chrome.storage.local.get('calendarEvents');
+
+    const allowedEvents = await chrome.storage.local.get(STORAGE_KEY);
+
+    events['calendarEvents'].forEach(event => {
+        const eventDate = new Date(event['startDate']);
+        
+        if (isTodayDate(eventDate) && containsAnySubstring(event['summary'], allowedEvents[STORAGE_KEY])) {
+            todayEvents.push(event);
+        }
+    });
+
+    return todayEvents;
+}
 
 //  initialize a dict with random objects to their prices
 const objectPrices = {
@@ -38,4 +69,50 @@ function displayCost(){
     comparison.innerText = `or nearly ${val.toFixed(1)} ${randomKey}`;
 }
 
+
+// Function to get the suffix for the day of the month
+function getDaySuffix(day) {
+    if (day > 3 && day < 21) return 'th';
+    switch (day % 10) {
+        case 1:  return "st";
+        case 2:  return "nd";
+        case 3:  return "rd";
+        default: return "th";
+    }
+}
+
+// Function to format the date as "19th Dec 2023"
+function formatDate(date) {
+    const day = date.getDate();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day}${getDaySuffix(day)} ${month} ${year}`;
+}
+
+document.getElementById('date').textContent = "Date: " + formatDate(new Date());
+
+// Function to add items to the table
+async function addItemsToTable() {
+    const table = document.getElementById('events-table-body');
+    const events = await getTodayEvents();
+        
+    events.forEach(event => {
+        let row = table.insertRow();
+        const startDate = new Date(event['startDate']);
+        const endDate = new Date(event['endDate']);
+
+        let time = row.insertCell(0);
+        let className = row.insertCell(1);
+        let duration = row.insertCell(2);
+
+        time.textContent = startDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        className.textContent = event['summary'];
+        duration.textContent = `${(endDate - startDate) / (1000 * 60)} mins`;
+    });
+}
+
 displayCost();
+addItemsToTable();
+getTodayEvents();

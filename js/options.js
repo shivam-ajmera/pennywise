@@ -1,9 +1,36 @@
 const uploadButton = document.getElementById("upload-button");
 const uploadMessage = document.getElementById("upload-message");
 
+function parseIcs(icsData) {
+  console.log('hi');
+  const events = [];
+  const jcalData = ICAL.parse(icsData);
+  const comp = new ICAL.Component(jcalData);
+
+  comp.getAllSubcomponents('vevent').forEach(vevent => {
+      const event = new ICAL.Event(vevent);
+      events.push({
+          summary: event.summary,
+          location: event.location,
+          startDate: event.startDate.toString(),
+          endDate: event.endDate.toString(),
+          description: event.description
+      });
+      console.log({
+        summary: event.summary,
+        location: event.location,
+        startDate: event.startDate.toString(),
+        endDate: event.endDate.toString(),
+        description: event.description
+    });
+  });
+
+  return events;
+}
+
 uploadButton.addEventListener("click", () => {
   const file = document.getElementById("calendar-file").files[0];
-  if (!file || !file.type.match(/\.ics$/)) {
+  if (!file || !file.name.endsWith('.ics')) {
     uploadMessage.textContent = "Please choose a valid .ics file.";
     return;
   }
@@ -39,6 +66,15 @@ const addName = () => {
     saveNames();
 };
 
+const submitTuition = () => {
+  var userInput = document.getElementById("tuitionInput");
+  const result = document.getElementById("tuition-result");
+
+  chrome.storage.local.set({ ['tuitionCost']: userInput.value });
+
+  result.textContent = `Tuition cost: ${userInput.value}`;
+};
+
 // Function to create a list item with a remove button
 const createListItem = (name) => {
     const listItem = document.createElement("li");
@@ -69,16 +105,24 @@ const saveNames = () => {
 };
 
 // Function to load the list of names from Chrome storage
-const loadNames = () => {
+const loadValues = () => {
     chrome.storage.local.get([STORAGE_KEY], (result) => {
         if (result[STORAGE_KEY]) {
             result[STORAGE_KEY].forEach(name => addNameToList(name));
         }
     });
+
+    chrome.storage.local.get(['tuitionCost'], (val) => {
+      if (val['tuitionCost']) {
+          const result = document.getElementById("tuition-result");
+          result.textContent = `Tuition cost: ${val['tuitionCost']}`;
+      }
+  });
 };
 
 // Event listener for the add button
 document.getElementById("addNameBtn").addEventListener("click", addName);
+document.getElementById("tuitionBtn").addEventListener("click", submitTuition);
 
 // Load names from storage when the page loads
-document.addEventListener("DOMContentLoaded", loadNames);
+document.addEventListener("DOMContentLoaded", loadValues);

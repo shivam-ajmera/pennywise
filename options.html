@@ -3,6 +3,7 @@
 <head>
   <link rel="stylesheet" href="css/styles.css">
   <title>My Calendar Events Settings</title>
+  <script src="./js/ical.min.js"></script>
 </head>
 <body>
   <h1>Upload Your Calendar File to Chrome Storage</h1>
@@ -15,6 +16,11 @@
     <input type="text" id="nameInput" placeholder="Calendar event contains..">
     <button id="addNameBtn">Add</button>
     <ul id="nameList"></ul>
+  
+    <h1>Enter your tuition cost for the semester</h1>
+    <input type="number" id="tuitionInput">
+    <button id="tuitionBtn">Submit</button>
+    <p id="tuition-result"></p>
 
   <script src="./js/options.js"></script>
 </body>
