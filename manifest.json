@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+  
+    "name": "Pennywise",
+    "description": "Lecture cost calculator",
+    "version": "1.0.0",
+    "author": "Shivam Ajmera",
+
+    "chrome_url_overrides": {
+      "newtab": "newtab.html"
+    },
+
+    "action": {
+      "default_title": "Click to view options"
+    },
+    
+    "background": {
+      "service_worker": "js/background.js"
+    },
+
+    "permissions": [
+      "storage",
+      "tabs"
+    ]
+}

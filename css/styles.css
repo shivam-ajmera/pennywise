@@ -1,0 +1,54 @@
+body {
+    background-color: #dedaca; 
+    font-family: 'Cardo', serif;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.cost-container {
+    position: relative;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.today-text {
+    color: black;
+    font-size: 30px;
+    align-self: flex-start;
+    margin-bottom: auto;
+    font-style: italic;
+}
+
+.dollar-value {
+    font-family: cursive;
+    font-weight: 900;
+    color: black;
+    font-size: 200px;
+    letter-spacing: 3px;
+    margin: auto;
+}
+
+.comparison-value {
+    color: black;
+    font-size: 25px;
+    align-self: flex-end;
+    margin-bottom: auto;
+    font-style: italic;
+}
+

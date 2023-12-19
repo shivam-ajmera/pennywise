@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="css/styles.css">
+  <title>My Calendar Events Settings</title>
+</head>
+<body>
+  <h1>Upload Your Calendar File to Chrome Storage</h1>
+  <p>Select your .ics file containing 4 months of events:</p>
+  <input type="file" id="calendar-file" accept=".ics">
+  <button type="button" id="upload-button">Upload</button>
+  <p id="upload-message"></p>
+
+  <h1>List of Class Name Substrings</h1>
+    <input type="text" id="nameInput" placeholder="Calendar event contains..">
+    <button id="addNameBtn">Add</button>
+    <ul id="nameList"></ul>
+
+  <script src="./js/options.js"></script>
+</body>
+</html>
