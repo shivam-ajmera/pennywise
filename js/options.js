@@ -12,17 +12,10 @@ function parseIcs(icsData) {
       events.push({
           summary: event.summary,
           location: event.location,
-          startDate: event.startDate.toString(),
-          endDate: event.endDate.toString(),
+          startDate: event.startDate.toString() + 'Z',
+          endDate: event.endDate.toString() + 'Z',
           description: event.description
       });
-      console.log({
-        summary: event.summary,
-        location: event.location,
-        startDate: event.startDate.toString(),
-        endDate: event.endDate.toString(),
-        description: event.description
-    });
   });
 
   return events;

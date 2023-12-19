@@ -29,6 +29,8 @@ async function getTodayEvents() {
         }
     });
 
+    console.log(todayEvents);
+
     return todayEvents;
 }
 
