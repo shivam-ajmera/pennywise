@@ -57,6 +57,7 @@ const addName = () => {
     addNameToList(input.value);
     input.value = "";
     saveNames();
+    loadResult();
 };
 
 const submitTuition = () => {
@@ -65,7 +66,7 @@ const submitTuition = () => {
 
   chrome.storage.local.set({ ['tuitionCost']: userInput.value });
 
-  result.textContent = `Tuition cost: ${userInput.value}`;
+  loadResult();
 };
 
 // Function to create a list item with a remove button
@@ -78,6 +79,7 @@ const createListItem = (name) => {
     removeBtn.addEventListener("click", () => {
         listItem.remove();
         saveNames();
+        loadResult();
     });
 
     listItem.appendChild(removeBtn);
@@ -99,18 +101,29 @@ const saveNames = () => {
 
 // Function to load the list of names from Chrome storage
 const loadValues = () => {
+    let numberOfCourses = 0;
     chrome.storage.local.get([STORAGE_KEY], (result) => {
         if (result[STORAGE_KEY]) {
             result[STORAGE_KEY].forEach(name => addNameToList(name));
+            numberOfCourses = result[STORAGE_KEY].length;
         }
     });
+};
 
-    chrome.storage.local.get(['tuitionCost'], (val) => {
-      if (val['tuitionCost']) {
-          const result = document.getElementById("tuition-result");
-          result.textContent = `Tuition cost: ${val['tuitionCost']}`;
+const loadResult = () => {
+  let numberOfCourses = 0;
+  chrome.storage.local.get([STORAGE_KEY], (result) => {
+      if (result[STORAGE_KEY]) {
+          numberOfCourses = result[STORAGE_KEY].length;
       }
   });
+
+  chrome.storage.local.get(['tuitionCost'], (val) => {
+    if (val['tuitionCost']) {
+        const result = document.getElementById("tuition-result");
+        result.textContent = `Avg. tuition cost: cost / no. of courses = ${val['tuitionCost']} / ${numberOfCourses} = ${val['tuitionCost'] / numberOfCourses}`;
+    }
+});
 };
 
 // Event listener for the add button
@@ -119,3 +132,4 @@ document.getElementById("tuitionBtn").addEventListener("click", submitTuition);
 
 // Load names from storage when the page loads
 document.addEventListener("DOMContentLoaded", loadValues);
+document.addEventListener("DOMContentLoaded", loadResult);
