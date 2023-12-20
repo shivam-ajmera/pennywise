@@ -49,15 +49,37 @@ const STORAGE_KEY = "nameListStorage"; // Key for storing data in Chrome storage
 
 // Function to add a new name to the list and save it
 const addName = () => {
-    const list = document.getElementById("nameList");
     const input = document.getElementById("nameInput");
 
     if (input.value.trim() === "") return;
 
-    addNameToList(input.value);
-    input.value = "";
-    saveNames();
-    loadResult();
+    if (Array.from(document.getElementById("name-table").rows).some(row => row.cells[0].textContent === input.value)) {
+        alert("Name already exists!");
+        return;
+    }
+
+    let count = 0;
+
+    chrome.storage.local.get('calendarEvents', function(result) {
+      const events = result['calendarEvents'] || []; // Provide a default value if undefined
+  
+      events.forEach(event => {
+          if (event['summary'] && event['summary'].includes(input.value)) {
+              count += 1;
+          }
+      });
+
+      if (count === 0) {
+        alert("Name not found in calendar!");
+        return;
+      }
+
+      addNameToTable(input.value, count);
+      input.value = "";
+
+      saveNames();
+      loadResult();
+    });
 };
 
 const submitTuition = () => {
@@ -69,34 +91,39 @@ const submitTuition = () => {
   loadResult();
 };
 
-// Function to create a list item with a remove button
-const createListItem = (name) => {
-    const listItem = document.createElement("li");
-    listItem.textContent = name;
+// Function to add a name to the list element
+const addNameToTable = (name, cost) => {
+    const table = document.getElementById("name-table");
+    let row = table.insertRow();
+
+    let nameCell = row.insertCell(0);
+    let costCell = row.insertCell(1);
+
+    nameCell.textContent = name;
+    costCell.textContent = cost;
 
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "Remove";
     removeBtn.addEventListener("click", () => {
-        listItem.remove();
+        row.remove();
         saveNames();
         loadResult();
     });
 
-    listItem.appendChild(removeBtn);
-    return listItem;
-};
-
-// Function to add a name to the list element
-const addNameToList = (name) => {
-    const list = document.getElementById("nameList");
-    const listItem = createListItem(name);
-    list.appendChild(listItem);
+    row.appendChild(removeBtn);
 };
 
 // Function to save the list of names to Chrome storage
 const saveNames = () => {
-    const names = Array.from(document.getElementById("nameList").children).map(li => li.firstChild.textContent);
-    chrome.storage.local.set({ [STORAGE_KEY]: names });
+    const vals = Array.from(document.getElementById("name-table").rows).slice(1).map(row => {
+      const [nameCell, costCell] = row.cells;
+      return { 
+          name: nameCell.textContent, 
+          cost: costCell.textContent 
+      };
+    });
+
+    chrome.storage.local.set({ [STORAGE_KEY]: vals });
 };
 
 // Function to load the list of names from Chrome storage
@@ -104,7 +131,7 @@ const loadValues = () => {
     let numberOfCourses = 0;
     chrome.storage.local.get([STORAGE_KEY], (result) => {
         if (result[STORAGE_KEY]) {
-            result[STORAGE_KEY].forEach(name => addNameToList(name));
+            result[STORAGE_KEY].forEach(item => addNameToTable(item['name'], item['cost']));
             numberOfCourses = result[STORAGE_KEY].length;
         }
     });
