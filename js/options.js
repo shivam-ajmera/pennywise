@@ -2,7 +2,6 @@ const uploadButton = document.getElementById("upload-button");
 const uploadMessage = document.getElementById("upload-message");
 
 function parseIcs(icsData) {
-  console.log('hi');
   const events = [];
   const jcalData = ICAL.parse(icsData);
   const comp = new ICAL.Component(jcalData);
@@ -92,15 +91,15 @@ const submitTuition = () => {
 };
 
 // Function to add a name to the list element
-const addNameToTable = (name, cost) => {
+const addNameToTable = (name, count) => {
     const table = document.getElementById("name-table");
     let row = table.insertRow();
 
     let nameCell = row.insertCell(0);
-    let costCell = row.insertCell(1);
+    let countCell = row.insertCell(1);
 
     nameCell.textContent = name;
-    costCell.textContent = cost;
+    countCell.textContent = count;
 
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "Remove";
@@ -115,33 +114,30 @@ const addNameToTable = (name, cost) => {
 
 // Function to save the list of names to Chrome storage
 const saveNames = () => {
-    const vals = Array.from(document.getElementById("name-table").rows).slice(1).map(row => {
-      const [nameCell, costCell] = row.cells;
-      return { 
-          name: nameCell.textContent, 
-          cost: costCell.textContent 
-      };
-    });
+  const tableRows = document.getElementById("name-table").rows;
+  const vals = {};
 
-    chrome.storage.local.set({ [STORAGE_KEY]: vals });
+  Array.from(tableRows).slice(1).forEach(row => {
+    const [nameCell, costCell] = row.cells;
+    vals[nameCell.textContent] = costCell.textContent;
+  });
+
+  chrome.storage.local.set({ [STORAGE_KEY]: vals });
 };
 
-// Function to load the list of names from Chrome storage
 const loadValues = () => {
-    let numberOfCourses = 0;
-    chrome.storage.local.get([STORAGE_KEY], (result) => {
-        if (result[STORAGE_KEY]) {
-            result[STORAGE_KEY].forEach(item => addNameToTable(item['name'], item['cost']));
-            numberOfCourses = result[STORAGE_KEY].length;
-        }
-    });
+  chrome.storage.local.get([STORAGE_KEY], (result) => {
+    if (result[STORAGE_KEY]) {
+        Object.entries(result[STORAGE_KEY]).forEach(([name, count]) => addNameToTable(name, count));
+    }
+  });
 };
 
 const loadResult = () => {
   let numberOfCourses = 0;
   chrome.storage.local.get([STORAGE_KEY], (result) => {
       if (result[STORAGE_KEY]) {
-          numberOfCourses = result[STORAGE_KEY].length;
+          numberOfCourses = Object.keys(result[STORAGE_KEY]).length;
       }
   });
 

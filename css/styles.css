@@ -125,7 +125,7 @@ thead th:not(:last-child) {
     text-align: left;
 }
 
-thead th:last-child {
+#receipt-t thead th:last-child {
     text-align: right;
 }
 

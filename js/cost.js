@@ -20,16 +20,15 @@ async function getTodayEvents() {
     const events = await chrome.storage.local.get('calendarEvents');
 
     const allowedEvents = await chrome.storage.local.get(STORAGE_KEY);
+    const allowedEventNames = Object.keys(allowedEvents[STORAGE_KEY])
 
-    events['calendarEvents'].forEach(event => {
+    events['calendarEvents']?.forEach(event => {
         const eventDate = new Date(event['startDate']);
         
-        if (isTodayDate(eventDate) && containsAnySubstring(event['summary'], allowedEvents[STORAGE_KEY])) {
+        if (isTodayDate(eventDate) && containsAnySubstring(event['summary'], allowedEventNames)) {
             todayEvents.push(event);
         }
     });
-
-    console.log(todayEvents);
 
     return todayEvents;
 }
@@ -56,18 +55,28 @@ const objectPrices = {
     "Fitbit Charge 5": 179.95
 };
 
-function displayCost(){
-    // Generate a random value between 10 and 100    
-    const min = 1000.00;
-    const max = 10000.00;
-    const randomValue = Math.random() * (max - min) + min;
+async function displayCost(){
+    // Get today's events
+    const todayEvents = await getTodayEvents();
+
+    // Get names of events from chrome storage
+    const allowedEvents = await chrome.storage.local.get(STORAGE_KEY);
+    const totalNumberOfClasses = Object.values(allowedEvents[STORAGE_KEY]).reduce((total, value) => {
+        return total + Number(value);
+      }, 0);
+
+    const tuition = await chrome.storage.local.get(['tuitionCost']);
+
+    const pricePerClass = (tuition['tuitionCost'] || 0) / (totalNumberOfClasses || 1);
+    
+    const total = pricePerClass * (todayEvents || []).length;
 
     // Format the value to 2 decimal places and add dollar sign
-    cost.innerText = `$${Number(randomValue.toFixed(2)).toLocaleString()}`;
+    cost.innerText = `$${Number(total.toFixed(2)).toLocaleString()}`;
 
     // Get a random object from the objectPrices dict
     const randomKey = Object.keys(objectPrices)[Math.floor(Math.random() * Object.keys(objectPrices).length)];
-    val = randomValue.toFixed(2) / objectPrices[randomKey];
+    val = total.toFixed(2) / objectPrices[randomKey];
     comparison.innerText = `or nearly ${val.toFixed(1)} ${randomKey}`;
 }
 
@@ -117,4 +126,3 @@ async function addItemsToTable() {
 
 displayCost();
 addItemsToTable();
-getTodayEvents();
