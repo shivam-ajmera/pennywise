@@ -56,10 +56,4 @@ button {
     background: #fff; /* Assuming a light mode design */
     width: 100%; /* Or any width per design requirements */
     box-sizing: border-box; /* Include padding and border in the width */
-  }
-  
-/* For an extra "floating" effect, you can add a transition to lift the div on hover */
-.section:hover {
-box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-transform: translateY(-5px);
 }
