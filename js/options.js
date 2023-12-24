@@ -1,4 +1,4 @@
-const uploadButton = document.getElementById("upload-button");
+const uploadButton = document.getElementById("uploadBtn");
 const uploadMessage = document.getElementById("upload-message");
 
 function parseIcs(icsData) {
@@ -100,8 +100,9 @@ const addNameToTable = (name, count) => {
 
     nameCell.textContent = name;
     countCell.textContent = count;
-
+  
     const removeBtn = document.createElement("button");
+    removeBtn.id = "removeBtn"
     removeBtn.textContent = "Remove";
     removeBtn.addEventListener("click", () => {
         row.remove();
@@ -109,7 +110,10 @@ const addNameToTable = (name, count) => {
         loadResult();
     });
 
-    row.appendChild(removeBtn);
+    const td = document.createElement("td");
+    td.appendChild(removeBtn);
+
+    row.appendChild(td);
 };
 
 // Function to save the list of names to Chrome storage

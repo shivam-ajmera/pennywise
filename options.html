@@ -1,34 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="./css/options.css">
   <title>My Calendar Events Settings</title>
   <script src="./js/ical.min.js"></script>
 </head>
 <body>
-  <h1>Upload Your Calendar File to Chrome Storage</h1>
-  <p>Select your .ics file containing 4 months of events:</p>
-  <input type="file" id="calendar-file" accept=".ics">
-  <button type="button" id="upload-button">Upload</button>
-  <p id="upload-message"></p>
-
-  <h1>List of Class Name Substrings</h1>
-    <input type="text" id="nameInput" placeholder="Calendar event contains..">
-    <button id="addNameBtn">Add</button>
-    <table id="name-table">
-      <thead>
-          <th>Name</th>
-          <th>Count</th>
-          <th>Action</th>
-      </thead>
-    </table>
+  <div class="settings-container">
+    <div class="section">
+      <h1>Upload Your Calendar File</h1>
+      <p>Select your .ics file containing events:</p>
+      <input type="file" id="calendar-file" accept=".ics">
+      <button type="button" id="uploadBtn">Upload</button>
+      <p id="upload-message"></p>
+    </div>
     
-  
-  <h1>Enter your tuition cost for the semester</h1>
-  <input type="number" id="tuitionInput">
-  <button id="tuitionBtn">Submit</button>
-  <p id="tuition-result"></p>
-
+    <div class="section">
+      <h1>List of Class Name Substrings</h1>
+      <input type="text" id="nameInput" placeholder="Calendar event contains exactly this substring..">
+      <button id="addNameBtn">Add</button>
+      <table id="name-table">
+        <thead>
+            <th>Name</th>
+            <th>Count</th>
+            <th>Action</th>
+        </thead>
+      </table>
+    </div>
+      
+    <div class="section">
+      <h1>Enter your tuition cost for the semester</h1>
+      <input type="number" id="tuitionInput" placeholder="Enter amount">
+      <button id="tuitionBtn">Submit</button>
+      <p id="tuition-result"></p>
+    </div>
+  </div>
 
   <script src="./js/options.js"></script>
 </body>
