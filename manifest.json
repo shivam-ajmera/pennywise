@@ -6,17 +6,15 @@
     "version": "1.0.0",
     "author": "Shivam Ajmera",
 
-    "chrome_url_overrides": {
-      "newtab": "newtab.html"
-    },
-
     "action": {
-      "default_title": "Click to view options"
+      "default_popup": "popup.html"
     },
     
     "background": {
-      "service_worker": "js/background.js"
+      "service_worker": "./js/background.js"
     },
+
+    "options_page": "options.html",
 
     "permissions": [
       "storage",

@@ -153,6 +153,14 @@ const loadResult = () => {
 });
 };
 
+document.getElementById('toggleNewTab').addEventListener('change', function() {
+  chrome.storage.local.set({'disableNewTab': !this.checked});
+});
+
+chrome.storage.local.get('disableNewTab', function(data) {
+  document.getElementById('toggleNewTab').checked = !data.disableNewTab;
+});
+
 // Event listener for the add button
 document.getElementById("addNameBtn").addEventListener("click", addName);
 document.getElementById("tuitionBtn").addEventListener("click", submitTuition);
