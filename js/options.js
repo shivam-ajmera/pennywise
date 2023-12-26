@@ -85,6 +85,13 @@ const submitTuition = () => {
   var userInput = document.getElementById("tuitionInput");
   const result = document.getElementById("tuition-result");
 
+  if (userInput.value.trim() === "") return;
+
+  if (userInput.value < 0) {
+    alert("Tuition cannot be negative!");
+    return;
+  }
+
   chrome.storage.local.set({ ['tuitionCost']: userInput.value });
 
   loadResult();
