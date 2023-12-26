@@ -77,7 +77,9 @@ async function displayCost(){
     // Get a random object from the objectPrices dict
     const randomKey = Object.keys(objectPrices)[Math.floor(Math.random() * Object.keys(objectPrices).length)];
     val = total.toFixed(2) / objectPrices[randomKey];
-    comparison.innerText = `or nearly ${val.toFixed(1)} ${randomKey}`;
+    if (comparison) {
+        comparison.innerText = `or nearly ${val.toFixed(1)} ${randomKey}`;
+    }
 }
 
 

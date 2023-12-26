@@ -1,57 +1,13 @@
 body {
-    background-color: #09009a; 
+    width: 200px;
+    height: 300px;
     font-family: 'Cardo', serif;
-    color: white;
-}
-
-main {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 90vh;
-}
-.cost-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.today-text {
-    font-size: 30px;
-    align-self: flex-start;
-    margin-bottom: auto;
-    font-style: italic;
-}
-
-.dollar-value {
-    font-family: cursive;
-    font-weight: 900;
-    font-size: 200px;
-    letter-spacing: 3px;
-    margin: auto;
-}
-
-.comparison-value {
-    font-size: 25px;
-    align-self: flex-end;
-    margin-bottom: auto;
-    font-style: italic;
 }
 
 .receipt-container {
-    display: block;
-    width: 100%;
     background: #fff;
-    max-width: 200px;
-    padding: 15px;
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-    position: absolute;
-    top: 20px;
-    left: 20px;
     color: #09009a;
+    padding: 5px;
 }
 
 .receipt-header {
@@ -79,7 +35,6 @@ main {
 .receipt-header h2 span {
     display: block;
 }
-
 
 
 table {

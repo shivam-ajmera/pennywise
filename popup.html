@@ -1,9 +1,44 @@
-<!-- BEGIN: Popup HTML -->
-<div id="popup" class="popup">
-    <div class="popup-content">
-        <span class="close">&times;</span>
-        <h2>Popup Title</h2>
-        <p>This is a basic popup.</p>
-    </div>
-</div>
-<!-- END: Popup HTML -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/popup.css">
+</head>
+
+<body>
+    <main>
+        <div class="receipt-container">
+    
+          <div class="receipt-header">
+          <h1>Receipt</h1>
+          </div>
+          
+          <div class="receipt-body">
+      
+              <p id="date"></p>
+              <div class="events">
+                  <table id="receipt-t">
+                      <thead>
+                          <th>Time</th>
+                          <th>Class</th>
+                          <th>Duration</th>
+                      </thead>
+                      <tbody id="events-table-body"></tbody>
+                      <tfoot>
+                          <tr>
+                              <td>Total</td>
+                              <td></td>
+                              <td class="dollar-value"></td>
+                          </tr>
+                      </tfoot>
+                  </table>
+              </div>
+          </div>
+          <h3 class="thanks">Thank you for your purchase!</h3>
+      </div>
+    </main>
+  <script src="./js/cost.js"></script>
+</body>
+</html>
