@@ -14,7 +14,7 @@
             <p class="dollar-value"></p>
             <p class="comparison-value"></p>
         </div>
-        <div class="receipt-container">
+        <div class="receipt-container" id="targetDivReceipt">
     
           <div class="receipt-header">
           <h1>Receipt</h1>
@@ -42,6 +42,13 @@
               </div>
           </div>
           <h3 class="thanks">Thank you for your purchase!</h3>
+      </div>
+      <div class="switch-container">
+        <label class="switch">
+            <input class="switch-input" type="checkbox" id="mySwitch"/>
+            <span class="switch-label" data-on="Day" data-off="Month"></span> 
+            <span class="switch-handle"></span> 
+        </label>
       </div>
     </main>
   <script src="./js/cost.js"></script>

@@ -20,6 +20,9 @@ async function getTodayEvents() {
     const events = await chrome.storage.local.get('calendarEvents');
 
     const allowedEvents = await chrome.storage.local.get(STORAGE_KEY);
+    if (allowedEvents[STORAGE_KEY] === undefined || allowedEvent[STORAGE_KEY] === null) {
+        return;
+    }
     const allowedEventNames = Object.keys(allowedEvents[STORAGE_KEY])
 
     events['calendarEvents']?.forEach(event => {
@@ -63,6 +66,9 @@ async function displayCost(){
 
     // Get names of events from chrome storage
     const allowedEvents = await chrome.storage.local.get(STORAGE_KEY);
+    if (!allowedEvents[STORAGE_KEY]) {
+        return;
+    }
     const totalNumberOfClasses = Object.values(allowedEvents[STORAGE_KEY]).reduce((total, value) => {
         return total + Number(value);
       }, 0);
@@ -112,7 +118,9 @@ document.getElementById('date').textContent = "Date: " + formatDate(new Date());
 async function addItemsToTable() {
     const table = document.getElementById('events-table-body');
     const events = await getTodayEvents();
-        
+    if (!events) {
+        return;
+    }
     events.forEach(event => {
         let row = table.insertRow();
         const startDate = new Date(event['startDate']);
@@ -128,5 +136,28 @@ async function addItemsToTable() {
     });
 }
 
+function applyTimeChanges(isDay){
+    var receipt = document.getElementById('targetDivReceipt');
+    if(isDay){
+        receipt.style.display = "block";
+    } else {
+        receipt.style.display = "none";
+    }
+}
+
+document.getElementById('mySwitch').addEventListener('change', function() {
+    applyTimeChanges(this.checked);
+});
+
+async function initialTimeChanges(){
+    var isDay = await chrome.storage.local.get(['isDay']);
+    if(isDay['isDay'] == undefined){
+        isDay['isDay'] = false;
+    }
+    applyTimeChanges(isDay['isDay']);
+    document.getElementById('mySwitch').checked = isDay['isDay'];
+}
+
 displayCost();
 addItemsToTable();
+initialTimeChanges();

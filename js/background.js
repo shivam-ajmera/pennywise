@@ -1,6 +1,4 @@
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  console.log(tab.url);
-
   chrome.storage.local.get('disableNewTab', function(data) {
     if (!data.disableNewTab && tab.url === 'chrome://newtab/') {
         chrome.tabs.update(tab.id, {url: './newtab.html'});

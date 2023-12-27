@@ -144,6 +144,13 @@ const loadValues = () => {
   });
 };
 
+const loadTimeRange = () => {
+  chrome.storage.local.get(['isDay'], (val) => {
+    document.getElementById('day').checked = val['isDay'];
+    document.getElementById('night').checked = !val['isDay'];
+  });
+};
+
 const loadResult = () => {
   let numberOfCourses = 0;
   chrome.storage.local.get([STORAGE_KEY], (result) => {
@@ -168,6 +175,16 @@ chrome.storage.local.get('disableNewTab', function(data) {
   document.getElementById('toggleNewTab').checked = !data.disableNewTab;
 });
 
+var timeRangeRadios = document.querySelectorAll('input[name="defaultTimeRange"]');
+
+// Add the event listener to each radio button
+timeRangeRadios.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      let isDaySelected = (this.value === 'on') ? true : false;
+      chrome.storage.local.set({['isDay']: isDaySelected})
+    });
+});
+
 // Event listener for the add button
 document.getElementById("addNameBtn").addEventListener("click", addName);
 document.getElementById("tuitionBtn").addEventListener("click", submitTuition);
@@ -175,3 +192,5 @@ document.getElementById("tuitionBtn").addEventListener("click", submitTuition);
 // Load names from storage when the page loads
 document.addEventListener("DOMContentLoaded", loadValues);
 document.addEventListener("DOMContentLoaded", loadResult);
+document.addEventListener("DOMContentLoaded", loadTimeRange);
+
