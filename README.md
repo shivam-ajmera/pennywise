@@ -1,2 +1,2 @@
 # pennywise
-Chrome Extension for Lecture Cost Calculator
+Chrome Extension for Class Cost Calculator
