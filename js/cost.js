@@ -52,7 +52,9 @@ const objectPrices = {
     "Microsoft Surface Pro 8": 1099.99,
     "Canon EOS R5 Cameras": 3899.00,
     "Bose SoundLink Bluetooth Speakers": 129.00,
-    "Fitbit Charge 5": 179.95
+    "Fitbit Charge 5": 179.95,
+    "Starbucks Cold Brews": 4,
+    "McDonald's French Fries": 4.89,
 };
 
 async function displayCost(){
