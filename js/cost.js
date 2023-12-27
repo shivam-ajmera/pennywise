@@ -4,7 +4,7 @@ const cost = document.querySelector('.dollar-value');
 const comparison = document.querySelector('.comparison-value');
 
 function isTodayDate(inputDate) {
-    const today = new Date("2023-09-13T00:00:00");
+    const today = new Date();
 
     return inputDate.getDate() === today.getDate() &&
             inputDate.getMonth() === today.getMonth() &&
