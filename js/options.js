@@ -35,7 +35,7 @@ uploadButton.addEventListener("click", () => {
     try {
       const events = parseIcs(icsData); // Use iCal.js library to parse
       await chrome.storage.local.set({ 'calendarEvents': events });
-      uploadMessage.textContent = "Upload successful! Refresh new tab to see today's events.";
+      uploadMessage.textContent = "Upload successful!";
     } catch (error) {
       uploadMessage.textContent = `Error parsing file: ${error.message}`;
     }
