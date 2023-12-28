@@ -1,5 +1,6 @@
 const STORAGE_KEY = "nameListStorage"; // Key for storing data in Chrome storage
 
+const displayText = document.querySelector('.today-text');
 const cost = document.querySelector('.dollar-value');
 const comparison = document.querySelector('.comparison-value');
 
@@ -8,6 +9,13 @@ function isTodayDate(inputDate) {
 
     return inputDate.getDate() === today.getDate() &&
             inputDate.getMonth() === today.getMonth() &&
+            inputDate.getFullYear() === today.getFullYear();
+}
+
+function isThisMonth(inputDate) {
+    const today = new Date();
+
+    return inputDate.getMonth() === today.getMonth() &&
             inputDate.getFullYear() === today.getFullYear();
 }
 
@@ -20,7 +28,7 @@ async function getTodayEvents() {
     const events = await chrome.storage.local.get('calendarEvents');
 
     const allowedEvents = await chrome.storage.local.get(STORAGE_KEY);
-    if (allowedEvents[STORAGE_KEY] === undefined || allowedEvent[STORAGE_KEY] === null) {
+    if (allowedEvents[STORAGE_KEY] === undefined || allowedEvents[STORAGE_KEY] === null) {
         return;
     }
     const allowedEventNames = Object.keys(allowedEvents[STORAGE_KEY])
@@ -34,6 +42,27 @@ async function getTodayEvents() {
     });
 
     return todayEvents;
+}
+
+async function getThisMonthEvents() {
+    const monthEvents = [];
+    const events = await chrome.storage.local.get('calendarEvents');
+
+    const allowedEvents = await chrome.storage.local.get(STORAGE_KEY);
+    if (allowedEvents[STORAGE_KEY] === undefined || allowedEvents[STORAGE_KEY] === null) {
+        return;
+    }
+    const allowedEventNames = Object.keys(allowedEvents[STORAGE_KEY])
+
+    events['calendarEvents']?.forEach(event => {
+        const eventDate = new Date(event['startDate']);
+        
+        if (isThisMonth(eventDate) && containsAnySubstring(event['summary'], allowedEventNames)) {
+            monthEvents.push(event);
+        }
+    });
+
+    return monthEvents;
 }
 
 //  initialize a dict with random objects to their prices
@@ -79,6 +108,8 @@ async function displayCost(){
     
     const total = pricePerClass * (todayEvents || []).length;
 
+    displayText.innerText = "Today costs you:";
+
     // Format the value to 2 decimal places and add dollar sign
     cost.innerText = `$${Number(total.toFixed(2)).toLocaleString()}`;
 
@@ -90,6 +121,36 @@ async function displayCost(){
     }
 }
 
+async function displayMonthCost(){
+    // Get this month's events
+    const monthEvents = await getThisMonthEvents();
+
+    // Get names of events from chrome storage
+    const allowedEvents = await chrome.storage.local.get(STORAGE_KEY);
+    if (!allowedEvents[STORAGE_KEY]) {
+        return;
+    }
+    const totalNumberOfClasses = Object.values(allowedEvents[STORAGE_KEY]).reduce((total, value) => {
+        return total + Number(value);
+      }, 0);
+
+    const tuition = await chrome.storage.local.get(['tuitionCost']);
+
+    const pricePerClass = (tuition['tuitionCost'] || 0) / (totalNumberOfClasses || 1);
+
+    const total = pricePerClass * (monthEvents || []).length;
+    
+    displayText.innerText = `${getThisMonth()} costs you:`;
+
+    cost.innerText = `$${Number(total.toFixed(2)).toLocaleString()}`;
+    
+    // Get a random object from the objectPrices dict
+    const randomKey = Object.keys(objectPrices)[Math.floor(Math.random() * Object.keys(objectPrices).length)];
+    val = total.toFixed(2) / objectPrices[randomKey];
+    if (comparison) {
+        comparison.innerText = `or nearly ${val.toFixed(1)} ${randomKey}`;
+    }
+}
 
 // Function to get the suffix for the day of the month
 function getDaySuffix(day) {
@@ -110,6 +171,14 @@ function formatDate(date) {
     const month = monthNames[date.getMonth()];
     const year = date.getFullYear();
     return `${day}${getDaySuffix(day)} ${month} ${year}`;
+}
+
+function getThisMonth() {
+    const day = new Date();
+    const fullMonthNames = ["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"];
+    const year = day.getFullYear();
+    return `${fullMonthNames[day.getMonth()]} ${year}`;
 }
 
 document.getElementById('date').textContent = "Date: " + formatDate(new Date());
@@ -140,8 +209,10 @@ function applyTimeChanges(isDay){
     var receipt = document.getElementById('targetDivReceipt');
     if(isDay){
         receipt.style.display = "block";
+        displayCost();
     } else {
         receipt.style.display = "none";
+        displayMonthCost();
     }
 }
 
@@ -158,6 +229,5 @@ async function initialTimeChanges(){
     document.getElementById('mySwitch').checked = isDay['isDay'];
 }
 
-displayCost();
 addItemsToTable();
 initialTimeChanges();
