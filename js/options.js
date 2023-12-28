@@ -35,7 +35,7 @@ uploadButton.addEventListener("click", async () => {
       await chrome.storage.local.set({ 'calendarEvents': events });
       uploadMessage.textContent = "Upload successful!";
     } else if (response.error) {
-      uploadMessage.textContent = `Error fetching the .ics file: ${response.error.message}`;
+      uploadMessage.textContent = `Error fetching the .ics file`;
     }
   });
 });
