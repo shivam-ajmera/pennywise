@@ -207,6 +207,9 @@ async function addItemsToTable() {
 
 function applyTimeChanges(isDay){
     var receipt = document.getElementById('targetDivReceipt');
+    if(!receipt){
+        return;
+    }
     if(isDay){
         receipt.style.display = "block";
         displayCost();
@@ -216,9 +219,12 @@ function applyTimeChanges(isDay){
     }
 }
 
-document.getElementById('mySwitch').addEventListener('change', function() {
-    applyTimeChanges(this.checked);
-});
+var mySwitch = document.getElementById('mySwitch');
+if (mySwitch) {
+    mySwitch.addEventListener('change', function() {
+        applyTimeChanges(this.checked);
+    });
+}
 
 async function initialTimeChanges(){
     var isDay = await chrome.storage.local.get(['isDay']);
@@ -226,7 +232,11 @@ async function initialTimeChanges(){
         isDay['isDay'] = false;
     }
     applyTimeChanges(isDay['isDay']);
-    document.getElementById('mySwitch').checked = isDay['isDay'];
+    var mySwitch = document.getElementById('mySwitch');
+    if(!mySwitch){
+        return;
+    }
+    mySwitch.checked = isDay['isDay'];
 }
 
 addItemsToTable();
