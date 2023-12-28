@@ -207,4 +207,10 @@ document.getElementById("tuitionBtn").addEventListener("click", submitTuition);
 document.addEventListener("DOMContentLoaded", loadValues);
 document.addEventListener("DOMContentLoaded", loadResult);
 document.addEventListener("DOMContentLoaded", loadTimeRange);
+document.addEventListener("DOMContentLoaded", async () => {
+  var calendarEvents = await chrome.storage.local.get('calendarEvents');
+  if (calendarEvents['calendarEvents']) {
+    uploadMessage.innerText = "Already uploaded!";
+  }
+});
 

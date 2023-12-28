@@ -241,3 +241,28 @@ tfoot tr:first-child td:first-child, tfoot tr:first-child td:last-child {
 	-moz-transition: All 0.3s ease;
 	-o-transition: All 0.3s ease;
 }
+
+#capturePageBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 8px;
+    opacity: 0.3; 
+}
+  
+#capturePageBtn img {
+    width: 24px; /* or the size of your icon */
+    height: 24px;
+    transition: opacity 0.3s ease;
+}
+
+#capturePageBtn:hover  {
+    opacity: 1; /* darken the icon on hover */
+}
+
+#copyText {
+    font-size: 14px;
+}
