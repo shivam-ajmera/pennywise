@@ -110,7 +110,7 @@ const addNameToTable = (name, count) => {
   
     const removeBtn = document.createElement("button");
     removeBtn.id = "removeBtn"
-    removeBtn.textContent = "Remove";
+    removeBtn.textContent = "Delete Keyword";
     removeBtn.addEventListener("click", () => {
         row.remove();
         saveNames();
@@ -159,10 +159,24 @@ const loadResult = () => {
       }
   });
 
-  chrome.storage.local.get(['tuitionCost'], (val) => {
+  chrome.storage.local.get(['tuitionCost'], async (val) => {
     if (val['tuitionCost']) {
         const result = document.getElementById("tuition-result");
-        result.textContent = `Avg. tuition cost: cost / no. of courses = ${val['tuitionCost']} / ${numberOfCourses} = ${val['tuitionCost'] / numberOfCourses}`;
+
+        // Get names of events from chrome storage
+        const allowedEvents = await chrome.storage.local.get(STORAGE_KEY);
+        if (!allowedEvents[STORAGE_KEY]) {
+            return;
+        }
+        const totalNumberOfClasses = Object.values(allowedEvents[STORAGE_KEY]).reduce((total, value) => {
+            return total + Number(value);
+          }, 0);
+
+        const tuition = await chrome.storage.local.get(['tuitionCost']);
+
+        const pricePerClass = (tuition['tuitionCost'] || 0) / (totalNumberOfClasses || 1);
+
+        result.textContent = `Cost per class = Total Tuition (${val['tuitionCost']}) \u00f7 No. of classes (${totalNumberOfClasses}) = $${pricePerClass.toFixed(2)}`;
     }
 });
 };

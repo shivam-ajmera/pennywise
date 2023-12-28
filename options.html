@@ -8,43 +8,43 @@
 <body>
   <div class="settings-container">
     <div class="section">
-      <h1>Upload Your Calendar File</h1>
-      <p>Select your .ics file containing events:</p>
+      <h1>Upload your calendar file</h1>
+      <p>Choose your class schedule (.ics file):</p>
       <input type="file" id="calendar-file" accept=".ics">
-      <button type="button" id="uploadBtn">Upload</button>
+      <button type="button" id="uploadBtn">Upload schedule</button>
       <p id="upload-message"></p>
     </div>
     
     <div class="section">
-      <h1>List of Class Name Substrings</h1>
-      <input type="text" id="nameInput" placeholder="Calendar event contains exactly this substring..">
-      <button id="addNameBtn">Add</button>
+      <h1>List of class name substrings</h1>
+      <input type="text" id="nameInput" placeholder="Keyword to match (eg: 'P 101' in SMP 101)">
+      <button id="addNameBtn">Add Keyword</button>
       <table id="name-table">
         <thead>
             <th>Substring</th>
-            <th>Count found</th>
+            <th>Number of Matches found in calendar</th>
             <th>Action</th>
         </thead>
       </table>
     </div>
       
     <div class="section">
-      <h1>Enter your tuition cost for the semester</h1>
-      <input type="number" id="tuitionInput" placeholder="Enter amount" min="0">
+      <h1>Enter your tuition cost for the uploaded schedule</h1>
+      <input type="number" id="tuitionInput" placeholder="Input your total tuition for calendar (eg: 5000)" min="0">
       <button id="tuitionBtn">Submit</button>
       <p id="tuition-result"></p>
     </div>
 
     <div class="section">
       <label>
-        <input type="checkbox" id="toggleNewTab"> Use custom new tab page
+        <input type="checkbox" id="toggleNewTab"> Enable new tab with your class cost overview and calendar for quick access.
     </label>
     </div>
 
     <div class="section">
-      <h1>Default Time Range</h1>
-      <label><input type="radio" name="defaultTimeRange" value="on" id="day">Day</label>
-      <label><input type="radio" name="defaultTimeRange" value="off" id="night">Month</label>
+      <h1>Default Time View</h1>
+      <label><input type="radio" name="defaultTimeRange" value="on" id="day">Per Day</label>
+      <label><input type="radio" name="defaultTimeRange" value="off" id="night">Per Month</label>
     </div>
 
   <script src="./js/options.js"></script>
