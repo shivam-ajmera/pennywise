@@ -20,28 +20,48 @@ function parseIcs(icsData) {
   return events;
 }
 
-uploadButton.addEventListener("click", () => {
-  const file = document.getElementById("calendar-file").files[0];
-  if (!file || !file.name.endsWith('.ics')) {
-    uploadMessage.textContent = "Please choose a valid .ics file.";
+uploadButton.addEventListener("click", async () => {
+  const url = document.getElementById("calendar-url").value;
+  if (!url || !url.endsWith('.ics')) {
+    uploadMessage.textContent = "Please choose a valid link (ends with .ics)";
     return;
   }
 
-  uploadMessage.textContent = "Uploading...";
+  uploadMessage.textContent = "Downloading from link...";
 
-  const reader = new FileReader();
-  reader.onload = async (event) => {
-    const icsData = event.target.result;
-    try {
-      const events = parseIcs(icsData); // Use iCal.js library to parse
+  chrome.runtime.sendMessage({action: "fetchICS", url: url}, async function(response) {
+    if (response.data) {
+      const events = parseIcs(response.data); // Use iCal.js library to parse
       await chrome.storage.local.set({ 'calendarEvents': events });
       uploadMessage.textContent = "Upload successful!";
-    } catch (error) {
-      uploadMessage.textContent = `Error parsing file: ${error.message}`;
+    } else if (response.error) {
+      uploadMessage.textContent = `Error fetching the .ics file: ${response.error.message}`;
     }
-  };
-  reader.readAsText(file);
+  });
 });
+
+// uploadButton.addEventListener("click", () => {
+//   const file = document.getElementById("calendar-file").files[0];
+//   if (!file || !file.name.endsWith('.ics')) {
+//     uploadMessage.textContent = "Please choose a valid .ics file.";
+//     return;
+//   }
+
+//   uploadMessage.textContent = "Uploading...";
+
+//   const reader = new FileReader();
+//   reader.onload = async (event) => {
+//     const icsData = event.target.result;
+//     try {
+//       const events = parseIcs(icsData); // Use iCal.js library to parse
+//       await chrome.storage.local.set({ 'calendarEvents': events });
+//       uploadMessage.textContent = "Upload successful!";
+//     } catch (error) {
+//       uploadMessage.textContent = `Error parsing file: ${error.message}`;
+//     }
+//   };
+//   reader.readAsText(file);
+// });
 
 
 const STORAGE_KEY = "nameListStorage"; // Key for storing data in Chrome storage
@@ -53,7 +73,7 @@ const addName = () => {
     if (input.value.trim() === "") return;
 
     if (Array.from(document.getElementById("name-table").rows).some(row => row.cells[0].textContent === input.value)) {
-        alert("Name already exists!");
+        alert("Keyword already exists!");
         return;
     }
 
@@ -69,7 +89,7 @@ const addName = () => {
       });
 
       if (count === 0) {
-        alert("Name not found in calendar!");
+        alert("Keyword not found in calendar!");
         return;
       }
 

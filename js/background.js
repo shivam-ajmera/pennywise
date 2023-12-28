@@ -6,11 +6,20 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   });
 });
 
-
 chrome.runtime.onInstalled.addListener(({reason}) => {
   if (reason === 'install') {
     chrome.tabs.create({
       url: "options.html"
     });
+  }
+});
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request.action == "fetchICS") {
+    fetch(request.url)
+      .then(response => response.text())
+      .then(data => sendResponse({data: data}))
+      .catch(error => sendResponse({error: error}));
+    return true; // keeps the message channel open for sendResponse
   }
 });

@@ -2,7 +2,6 @@
 function captureEntirePageAndOpenNewTab() {
     const elements = document.getElementsByClassName('receipt-container');
     if (elements.length > 0) {
-        console.log(elements[0]);
         html2canvas(elements[0]).then(canvas => {
             canvas.toBlob(function(blob) {
                 const item = new ClipboardItem({ "image/png": blob });
