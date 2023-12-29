@@ -133,7 +133,7 @@ const addNameToTable = (name, count) => {
   
     const removeBtn = document.createElement("button");
     removeBtn.id = "removeBtn"
-    removeBtn.textContent = "Delete Keyword";
+    removeBtn.textContent = "Delete";
     removeBtn.addEventListener("click", () => {
         row.remove();
         saveNames();
