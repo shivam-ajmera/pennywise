@@ -11,8 +11,8 @@ function parseIcs(icsData) {
       events.push({
           summary: event.summary,
           location: event.location,
-          startDate: event.startDate.toString() + 'Z',
-          endDate: event.endDate.toString() + 'Z',
+          startDate: (!event.startDate.toString().endsWith('Z')) ? event.startDate.toString() + 'Z' : event.startDate.toString(),
+          endDate: (!event.endDate.toString().endsWith('Z')) ? event.endDate.toString() + 'Z' : event.startDate.toString(),
           description: event.description
       });
   });
