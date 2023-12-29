@@ -53,7 +53,6 @@ button {
     width: 100%;
 }
 
-
 .section {
     margin: 15px;
     padding: 10px 20px;
@@ -63,4 +62,14 @@ button {
     background: #fff; /* Assuming a light mode design */
     width: 100%; /* Or any width per design requirements */
     box-sizing: border-box; /* Include padding and border in the width */
+}
+
+#help-instructions {
+    margin: 10px;
+}
+
+button:disabled {
+    background-color: #ccc;
+    color: #fff;
+    cursor: not-allowed;
 }

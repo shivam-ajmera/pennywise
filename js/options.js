@@ -27,17 +27,20 @@ uploadButton.addEventListener("click", async () => {
     return;
   }
 
-  uploadMessage.textContent = "Downloading from link...";
+  uploadMessage.textContent = "In Progress...";
+  uploadButton.disabled = true;
 
   chrome.runtime.sendMessage({action: "fetchICS", url: url}, async function(response) {
     if (response.data) {
       const events = parseIcs(response.data); // Use iCal.js library to parse
       await chrome.storage.local.set({ 'calendarEvents': events });
-      uploadMessage.textContent = "Upload successful!";
+      uploadMessage.textContent = "Completed!";
     } else if (response.error) {
       uploadMessage.textContent = `Error fetching the .ics file`;
     }
   });
+
+  uploadButton.disabled = false;
 });
 
 // uploadButton.addEventListener("click", () => {
