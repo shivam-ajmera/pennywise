@@ -2,6 +2,7 @@ const STORAGE_KEY = "nameListStorage"; // Key for storing data in Chrome storage
 
 const displayText = document.querySelector('.today-text');
 const cost = document.querySelector('.dollar-value');
+const popupCost = document.querySelector('.dollar-value-popup');
 const comparison = document.querySelector('.comparison-value');
 
 function isTodayDate(inputDate) {
@@ -39,6 +40,12 @@ async function getTodayEvents() {
         if (isTodayDate(eventDate) && containsAnySubstring(event['summary'], allowedEventNames)) {
             todayEvents.push(event);
         }
+    });
+
+    todayEvents.sort((a, b) => {
+        const aDate = new Date(a['startDate']);
+        const bDate = new Date(b['startDate']);
+        return aDate - bDate;
     });
 
     return todayEvents;
@@ -88,6 +95,33 @@ const objectPrices = {
     "Starbucks Cold Brews": 4,
     "McDonald's French Fries": 4.89,
 };
+
+async function displayPopupCost(){
+    if(!popupCost){
+        return;
+    }
+
+    // Get today's events
+    const todayEvents = await getTodayEvents();
+
+    // Get names of events from chrome storage
+    const allowedEvents = await chrome.storage.local.get(STORAGE_KEY);
+    if (!allowedEvents[STORAGE_KEY]) {
+        return;
+    }
+    const totalNumberOfClasses = Object.values(allowedEvents[STORAGE_KEY]).reduce((total, value) => {
+        return total + Number(value);
+      }, 0);
+
+    const tuition = await chrome.storage.local.get(['tuitionCost']);
+
+    const pricePerClass = (tuition['tuitionCost'] || 0) / (totalNumberOfClasses || 1);
+    
+    const total = pricePerClass * (todayEvents || []).length;
+
+    // Format the value to 2 decimal places and add dollar sign
+    popupCost.innerText = `$${Number(total.toFixed(2)).toLocaleString()}`;
+}
 
 async function displayCost(){
     // Get today's events
@@ -241,3 +275,4 @@ async function initialTimeChanges(){
 
 addItemsToTable();
 initialTimeChanges();
+displayPopupCost();
