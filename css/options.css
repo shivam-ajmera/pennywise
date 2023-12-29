@@ -74,3 +74,31 @@ button:disabled {
     color: #fff;
     cursor: not-allowed;
 }
+
+.suggestions-container{
+    margin: 10px auto;
+}
+
+button:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+#suggestions{
+    margin: 5px;
+}
+
+#sugBtn {
+    background: #008080;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    width: auto;
+    margin: 2px;
+    border-radius: 20px;
+    font-size: 11px;
+}
+
+#sugBtn:hover {
+    opacity: 0.9;
+}

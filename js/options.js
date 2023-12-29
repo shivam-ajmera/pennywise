@@ -20,6 +20,47 @@ function parseIcs(icsData) {
   return events;
 }
 
+async function displaySuggestions(){
+  var top5 = await chrome.storage.local.get('suggestions');
+  if (!top5['suggestions']) {
+    return;
+  }
+  var modify = document.getElementById("suggestions");
+  modify.innerHTML = "";
+
+  const colors = ["#005B96", "#D35400", "#145A32", "#784212", "#4A235A"]
+
+  top5['suggestions'].forEach((event, index) => {
+    var sug = document.createElement("button");
+    sug.id = "sugBtn";
+    sug.innerText = "+ " + event;
+    sug.style.backgroundColor = colors[index];
+    
+    sug.addEventListener("click", () => {
+      addName(event);
+    });
+
+    modify.appendChild(sug);
+  });
+}
+
+async function postSuggestions(events) {
+  // Create a frequency dictionary of all event.summary
+  var frequency = {};
+  events.forEach(event => {
+    if (event['summary'] in frequency) {
+      frequency[event['summary']] += 1;
+    } else {
+      frequency[event['summary']] = 1;
+    }
+  });
+
+  // select top 5 most frequent events
+  var top5 = Object.keys(frequency).sort(function(a, b) { return frequency[b] - frequency[a]; }).slice(0, 5);
+
+  await chrome.storage.local.set({'suggestions': top5 });
+}
+
 uploadButton.addEventListener("click", async () => {
   const url = document.getElementById("calendar-url").value;
   if (!url || !url.endsWith('.ics')) {
@@ -34,6 +75,7 @@ uploadButton.addEventListener("click", async () => {
     if (response.data) {
       const events = parseIcs(response.data); // Use iCal.js library to parse
       await chrome.storage.local.set({ 'calendarEvents': events });
+      await postSuggestions(events);
       uploadMessage.textContent = "Completed!";
     } else if (response.error) {
       uploadMessage.textContent = `Error fetching the .ics file`;
@@ -70,12 +112,10 @@ uploadButton.addEventListener("click", async () => {
 const STORAGE_KEY = "nameListStorage"; // Key for storing data in Chrome storage
 
 // Function to add a new name to the list and save it
-const addName = () => {
-    const input = document.getElementById("nameInput");
+const addName = (input) => {
+    if (input.trim() === "") return;
 
-    if (input.value.trim() === "") return;
-
-    if (Array.from(document.getElementById("name-table").rows).some(row => row.cells[0].textContent === input.value)) {
+    if (Array.from(document.getElementById("name-table").rows).some(row => row.cells[0].textContent === input)) {
         alert("Keyword already exists!");
         return;
     }
@@ -86,7 +126,7 @@ const addName = () => {
       const events = result['calendarEvents'] || []; // Provide a default value if undefined
   
       events.forEach(event => {
-          if (event['summary'] && event['summary'].includes(input.value)) {
+          if (event['summary'] && event['summary'].includes(input)) {
               count += 1;
           }
       });
@@ -96,8 +136,8 @@ const addName = () => {
         return;
       }
 
-      addNameToTable(input.value, count);
-      input.value = "";
+      addNameToTable(input, count);
+      input = "";
 
       saveNames();
       loadResult();
@@ -165,6 +205,8 @@ const loadValues = () => {
         Object.entries(result[STORAGE_KEY]).forEach(([name, count]) => addNameToTable(name, count));
     }
   });
+
+  displaySuggestions();
 };
 
 const loadTimeRange = () => {
@@ -223,7 +265,11 @@ timeRangeRadios.forEach(function(radio) {
 });
 
 // Event listener for the add button
-document.getElementById("addNameBtn").addEventListener("click", addName);
+document.getElementById("addNameBtn").addEventListener("click", function() {
+  var val = document.getElementById("nameInput").value;
+  addName(val);
+});
+
 document.getElementById("tuitionBtn").addEventListener("click", submitTuition);
 
 // Load names from storage when the page loads
