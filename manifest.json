@@ -29,7 +29,8 @@
     ],
 
     "host_permissions": [
-      "http://*/*", 
-      "https://*/*"
+      "https://portalapi2.uwaterloo.ca/v2/calendar/*",
+      "https://calendar.google.com/calendar/ical/*",
+      "https://outlook.live.com/*"
     ]
 }
