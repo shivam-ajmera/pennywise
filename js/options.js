@@ -59,6 +59,7 @@ async function postSuggestions(events) {
   var top5 = Object.keys(frequency).sort(function(a, b) { return frequency[b] - frequency[a]; }).slice(0, 5);
 
   await chrome.storage.local.set({'suggestions': top5 });
+  await displaySuggestions();
 }
 
 uploadButton.addEventListener("click", async () => {
